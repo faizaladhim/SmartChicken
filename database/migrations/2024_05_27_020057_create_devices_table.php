@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('device', function (Blueprint $table) {           
+        Schema::create('devices', function (Blueprint $table) {           
             $table->string('id'); // kolom id dengan tipe varchar
             $table->primary('id'); // define id menjadi primary key            
             $table->foreignId('user_id')->constrained();            
@@ -23,7 +23,7 @@ return new class extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('device');
+        Schema::dropIfExists('devices');
     }
     
 };

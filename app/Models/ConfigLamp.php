@@ -8,13 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ConfigLamp extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
-
-    protected $appends = ['data_json'];
-
-    public function getDataJsonAttribute($value)
-    {
-        return json_decode($this->data);
-    }
+    /** 
+    *indicates if model should be timestamped.
+    *
+    * @var bool
+    */
+    public $timestamps = true;
 }

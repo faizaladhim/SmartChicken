@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('config_heater', function (Blueprint $table) {
-            $table->foreignId('device_id')->constrained();
+        Schema::create('config_heaters', function (Blueprint $table) {
+            $table->string('device_id');
+            $table->foreign('device_id')->references('id')->on('devices');
             $table->enum('mode', ['manual', 'automatic'])->default('manual');
             $table->boolean('status')->default(0);
             $table->float('max_temp')->nullable();
@@ -23,6 +24,6 @@ return new class extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('config_heater');
+        Schema::dropIfExists('config_heaters');
     }
 };

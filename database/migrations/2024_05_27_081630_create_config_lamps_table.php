@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('config_lamp', function (Blueprint $table) {
-            $table->foreignId('device_id')->constrained();
+        Schema::create('config_lamps', function (Blueprint $table) {
+            $table->string('device_id');
+            $table->foreign('device_id')->references('id')->on('devices');
             $table->boolean('status')->default(0);
             $table->time('time_on')->nullable();
             $table->time('time_off')->nullable();
@@ -22,6 +23,6 @@ return new class extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('config_lamp');
+        Schema::dropIfExists('config_lamps');
     }
 };

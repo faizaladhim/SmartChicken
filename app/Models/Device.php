@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Device extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
+    /** 
+    *indicates if model should be timestamped.
+    *
+    * @var bool
+    */
+    public $timestamps = true;
 }
