@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function(){
     Route::middleware('role:farmer')->prefix('config')->name('config.')->group(function(){
         Route::get('heater', [ConfigHeaterController::class, 'index']);
     });
-    Route::middleware('role:admin')->prefix('management')->name('management.device.index')->group(function(){
+    Route::middleware('role:admin')->prefix('management')->name('management.')->group(function(){
         Route::resource('users', UserController::class);
         Route::resource('devices', DeviceController::class);
     });
