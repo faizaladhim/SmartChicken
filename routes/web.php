@@ -45,12 +45,12 @@ Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 // Device routes
-Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
-Route::get('/devices/create', [DeviceController::class, 'create'])->name('devices.create');
-Route::post('/devices', [DeviceController::class, 'store'])->name('devices.store');
-Route::get('/devices/{id}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
-Route::put('/devices/{id}', [DeviceController::class, 'update'])->name('devices.update');
-Route::delete('/devices/{id}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+Route::get('/device', [DeviceController::class, 'index'])->name('device.index');
+Route::get('/device/create', [DeviceController::class, 'create'])->name('device.create');
+Route::post('/device', [DeviceController::class, 'store'])->name('device.store');
+Route::get('/device/{id}/edit', [DeviceController::class, 'edit'])->name('device.edit');
+Route::put('/device/{id}', [DeviceController::class, 'update'])->name('device.update');
+Route::delete('/device/{id}', [DeviceController::class, 'destroy'])->name('device.destroy');
 });
 
 
