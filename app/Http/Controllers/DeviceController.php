@@ -2,37 +2,111 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Device;
 use Illuminate\Http\Request;
+use App\Models\Device;
+use App\Models\User;
 
 class DeviceController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        return Device::all();
+        $devices = Device::all();
+
+        // Add alert on delete button
+        $title = 'Delete device!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+
+        return view('content.management.device.index', compact('devices'));
     }
 
-    public function show($id)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        return Device::find($id);
+        $users = User::role('farmer')->get();
+        return view('content.management.device.createDevice', compact('users'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $device = Device::create($request->all());
-        return response()->json($device, 201);
+        try{
+            $validated = $request->validate([
+                "id" => ['required', 'max:6'],
+                "user_id" => ['required'],
+                "name" => ['required'],
+            ]);
+            
+            $device = new Device;
+            $device->id = $request->id;
+            $device->user_id = $request->user_id;
+            $device->name = $request->name;   
+            $device->save();
+
+            toastr()->success("Device Created Successfully");
+            return redirect()->route('management.device.index');
+        } catch (\Illuminate\Database\QueryException $e){
+            toastr()->error($e->getMessage());
+            return redirect()->route('management.device.createDevice');
+        }
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $device = Device::findOrFail($id);
-        $device->update($request->all());
-        return response()->json($device, 200);
+        //
     }
 
-    public function delete($id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
-        Device::findOrFail($id)->delete();
-        return response()->json(null, 204);
+        $device = Device::find($id);
+        $users = User::role('farmer')->get();
+        return view('content.management.device.editDevice', compact('device', 'users'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        try{
+            $validated = $request->validate([
+                "id" => ['required', 'max:6'],
+                "user_id" => ['required'],
+                "name" => ['required'],
+            ]);
+            
+            $device = Device::find($id);
+            $device->id = $request->id ?? $device->id;
+            $device->user_id = $request->user_id ?? $device->user_id;
+            $device->name = $request->name ?? $device->name;   
+            $device->save();
+
+            toastr()->success("Device Updated Successfully");
+            return redirect()->route('management.device.index');
+        } catch (\Illuminate\Database\QueryException $e){
+            toastr()->error($e->getMessage());
+            return redirect()->route('management.device.editDevice',$id);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }

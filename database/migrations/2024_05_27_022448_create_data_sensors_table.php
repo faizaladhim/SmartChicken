@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('temperature')->nullable();
             $table->float('humidity')->nullable();
             $table->float('light_intensity')->nullable();
+            $table->float('MQ7')->nullable();
             $table->timestamps();
         });
     }

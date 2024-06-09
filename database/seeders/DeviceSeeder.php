@@ -20,14 +20,16 @@ class DeviceSeeder extends Seeder
             'user_id' => 1,
             'name' => 'Kandang Ayam umur 1 - 7 hari'
         ]);
+
         ConfigHeater::create([
             'device_id'=> 'A001',
-            'max_temp' => 29,
+            'max_temp' => 50,
             'min_temp' => 20,
         ]);
+
         ConfigLamp::create([
             'device_id'=> 'A001',
-            'time_on' => '00:07:00',
+            'time_on' => '00:010:00',
             'time_off' => '00:18:00',
         ]);
     }

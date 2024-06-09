@@ -17,13 +17,28 @@ class MainController extends Controller
         $device = Device::find($deviceId);
         $configHeater = ConfigHeater::where('device_id', $deviceId)->first();
         $configLamp = ConfigLamp::where('device_id',$deviceId)->first();
+        # Perlu function untuk cek jam dari config lamp 
+        $status = 0;
+        // Contoh kasus
+        // jam sekarang 9 malam
+        // time_on = 7 Pagi
+        // time_off = 8 Malam
+        if (\Carbon\Carbon::now() >= $configLamp->time_on && \Carbon\Carbon::now() <= $configLamp->time_off){
+            // lampu nyala
+            $status = 1;
+        } else {
+            // lampu mati
+            $status = 0;
+        }
         return response()->json([
             "status" => "Success",
             "message" => "Config fetch successfuly",
             "data" => [
                 "device" => $device,
                 "heater" => $configHeater,
-                "lamp" => $configLamp
+                "lamp" => [
+                    "status" => $status
+                ]
             ]
         ], 200);
     }
@@ -35,13 +50,15 @@ class MainController extends Controller
             $validated = $request->validate([
                 'temperature' => ['decimal:1'],
                 'humidity' => ['decimal:1'],
-                'light_intensity' => ['decimal:1']
+                'light_intensity' => ['decimal:1'],
+                'MQ7' => ['decimal:1'],
             ]);
             $dataSensor = DataSensor::create([
                 'device_id' => $deviceId,
                 'temperature' => $request->temperature,
                 'humidity' => $request->humidity,
                 'light_intensity' => $request->light_intensity,
+                'MQ7' => $request->MQ7,
             ]);
             return response()->json([
                 "status" => "Success",

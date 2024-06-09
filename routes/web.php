@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\ConfigHeaterController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ConfigLampController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,16 +17,41 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
+Route::get('/login',[AuthController::class, 'index'])->name('login');
+Route::post('/auth/login',[AuthController::class, 'login']);
+Route::post('/auth/logout',[AuthController::class, 'logout']);
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function(){
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::middleware('role:farmer')->prefix('config')->name('config.')->group(function(){
+        Route::get('heater', [ConfigHeaterController::class, 'index']);
+    });
+    Route::middleware('role:admin')->prefix('management')->name('management.device.index')->group(function(){
+        Route::resource('users', UserController::class);
+        Route::resource('devices', DeviceController::class);
+    });
+
+    Route::get('/heater',[ConfigHeaterController::class, 'index'])->name('heater.index');
+    
+    Route::get('/lamp',[ConfigLampController::class, 'index'])->name('lamp.index');
+
+// User routes
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+// Device routes
+Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
+Route::get('/devices/create', [DeviceController::class, 'create'])->name('devices.create');
+Route::post('/devices', [DeviceController::class, 'store'])->name('devices.store');
+Route::get('/devices/{id}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
+Route::put('/devices/{id}', [DeviceController::class, 'update'])->name('devices.update');
+Route::delete('/devices/{id}', [DeviceController::class, 'destroy'])->name('devices.destroy');
 });
 
-Route::get('/login',function(){  
-     return view('auth.login');
-});
 
-Route::get('/dashboard', function () {
-     return view('dashboard.index');
-});
+
